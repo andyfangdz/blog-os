@@ -6,6 +6,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: install rust-src
+          command: rustup component add rust-src
+      - run:
           name: install xbuild
           command: cargo install cargo-xbuild
       - run:
