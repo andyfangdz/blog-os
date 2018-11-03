@@ -1,0 +1,6 @@
+[package]
+name = "blog-os"
+version = "0.1.0"
+authors = ["Andy Fang <andy.fang@airbnb.com>"]
+
+[dependencies]

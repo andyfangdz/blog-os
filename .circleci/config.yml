@@ -2,12 +2,12 @@ version: 2
 jobs:
   build:
     docker:
-      - image: debian:stretch
+      - image: rustlang/rust:nightly
     steps:
       - checkout
       - run:
-          name: Greeting
-          command: echo Hello, world.
+          name: cargo install
+          command: cargo install
       - run:
-          name: Print the Current Time
-          command: date
+          name: build kernel
+          command: cargo xbuild --target x86_64-blog_os.json
