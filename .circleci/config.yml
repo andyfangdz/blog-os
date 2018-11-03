@@ -6,8 +6,5 @@ jobs:
     steps:
       - checkout
       - run:
-          name: cargo install
-          command: cargo install
-      - run:
           name: build kernel
           command: cargo xbuild --target x86_64-blog_os.json
