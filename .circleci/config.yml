@@ -40,9 +40,9 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - cargo-lock-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Cargo.lock" }}
-            - cargo-lock-v1-{{ arch }}-{{ .Branch }}-
-            - cargo-lock-v1-{{ arch }}-
+            - cargo-lock-v2-{{ arch }}-{{ .Branch }}-{{ checksum "Cargo.lock" }}
+            - cargo-lock-v2-{{ arch }}-{{ .Branch }}-
+            - cargo-lock-v2-{{ arch }}-
       - run:
           name: Install Formatter
           command: rustup component add rustfmt-preview
@@ -70,8 +70,8 @@ jobs:
       - save_cache:
           paths:
             - ~/.cargo
-            - target/sysroot
-          key: cargo-lock-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Cargo.lock" }}
+            - target
+          key: cargo-lock-v2-{{ arch }}-{{ .Branch }}-{{ checksum "Cargo.lock" }}
 
 workflows:
   version: 2
