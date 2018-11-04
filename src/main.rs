@@ -7,6 +7,7 @@ extern crate bootloader_precompiled;
 extern crate volatile;
 extern crate spin;
 
+#[macro_use]
 mod vga_buffer;
 
 use core::panic::PanicInfo;
@@ -14,13 +15,12 @@ use core::panic::PanicInfo;
 /// This function is called on panic.
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
+    println!("{}", _info);
     loop {}
 }
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    use core::fmt::Write;
-    vga_buffer::WRITER.lock().write_str("Hello again").unwrap();
-    write!(vga_buffer::WRITER.lock(), ", some numbers: {} {}", 42, 1.337).unwrap();
-    loop {}
+    println!("Hello World{}", "!");
+    panic!("Some panic message");
 }
