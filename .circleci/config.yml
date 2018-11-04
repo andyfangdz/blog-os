@@ -7,8 +7,7 @@ defaults: &defaults
 
 jobs:
   build-env:
-    docker:
-      - image: debian:stretch
+    <<: *defaults
     steps:
       - checkout
       - setup_remote_docker:
