@@ -34,52 +34,49 @@ jobs:
           docker login -u $DOCKER_USER -p $DOCKER_PASS
           docker push $IMAGE
 
-  test:
-    <<: *build-defaults
-    steps:
-      - checkout
-      - run:
-          name: rustup component add rustfmt-preview
-          command: rustup component add rustfmt-preview
-      - run:
-          name: cargo fmt
-          command: cargo fmt --all -- --check
-      - run:
-          name: cargo xbuild
-          command: cargo xbuild --target x86_64-blog-os.json
-      - run:
-          name: cargo test
-          command: cargo test
-      - run:
-          name: build kernel release
-          command: cargo xbuild --target x86_64-blog-os.json --release
-      - run:
-          name: build boot image
-          command: bootimage build --release
-      - store_artifacts:
-          path: /root/project/target/x86_64-blog-os/release/bootimage-blog-os.bin
-          destination: bootimage-blog-os.bin
-
   build:
     <<: *build-defaults
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - cargo-lock-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Cargo.lock" }}
+            - cargo-lock-v1-{{ arch }}-{{ .Branch }}-
+            - cargo-lock-v1-{{ arch }}-
       - run:
-          name: build kernel
+          name: Install Formatter
+          command: rustup component add rustfmt-preview
+      - run:
+          name: Run Formatter
+          command: cargo fmt --all -- --check
+      - run:
+          name: Build Debug Target
+          command: cargo xbuild --target x86_64-blog-os.json
+      - run:
+          name: Run Unit Tests
+          command: cargo test
+      - run:
+          name: Run Integration Tests
+          command: bootimage test
+      - run:
+          name: Build Release Target
           command: cargo xbuild --target x86_64-blog-os.json --release
       - run:
-          name: build boot image
+          name: Build Boot Image
           command: bootimage build --release
       - store_artifacts:
           path: /root/project/target/x86_64-blog-os/release/bootimage-blog-os.bin
           destination: bootimage-blog-os.bin
+      - save_cache:
+          paths:
+            - ~/.cargo
+          key: cargo-lock-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Cargo.lock" }}
 
 workflows:
   version: 2
   build-test-deploy:
     jobs:
       - build-env
-      - test
       - build
   nightly-buildenv:
     triggers:
