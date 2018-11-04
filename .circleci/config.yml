@@ -38,6 +38,9 @@ jobs:
       - run:
           name: build kernel
           command: cargo xbuild --target x86_64-blog-os.json
+      - run:
+          name: build boot image
+          command: bootimage build
 
 workflows:
   version: 2
