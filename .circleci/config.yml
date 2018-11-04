@@ -45,11 +45,20 @@ jobs:
           name: cargo fmt
           command: cargo fmt --all -- --check
       - run:
-          name: cargo build
-          command: cargo build
+          name: cargo xbuild
+          command: cargo xbuild --target x86_64-blog-os.json
       - run:
           name: cargo test
           command: cargo test
+      - run:
+          name: build kernel release
+          command: cargo xbuild --target x86_64-blog-os.json --release
+      - run:
+          name: build boot image
+          command: bootimage build --release
+      - store_artifacts:
+          path: /root/project/target/x86_64-blog-os/release/bootimage-blog-os.bin
+          destination: bootimage-blog-os.bin
 
   build:
     <<: *build-defaults
