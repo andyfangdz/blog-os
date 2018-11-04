@@ -26,7 +26,7 @@ jobs:
           IMAGE=andyfangdz/blog-os-buildenv
           TAG=circleci-build-$CIRCLE_BUILD_NUM
           GIT_SHA=$(git rev-parse HEAD | cut -c 1-6)
-          docker build -t $IMAGE:$TAG -t $IMAGE:latest -t $IMAGE:git-$GIT_SHA .
+          docker build --target buildenv -t $IMAGE:$TAG -t $IMAGE:latest -t $IMAGE:git-$GIT_SHA .
           docker login -u $DOCKER_USER -p $DOCKER_PASS
           docker push $IMAGE
 
@@ -37,10 +37,13 @@ jobs:
       - checkout
       - run:
           name: build kernel
-          command: cargo xbuild --target x86_64-blog-os.json
+          command: cargo xbuild --target x86_64-blog-os.json --release
       - run:
           name: build boot image
-          command: bootimage build
+          command: bootimage build --release
+      - store_artifacts:
+          path: /root/project/target/x86_64-blog-os/release/bootimage-blog-os.bin
+          destination: artifact-file
 
 workflows:
   version: 2
