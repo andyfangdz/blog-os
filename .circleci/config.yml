@@ -43,7 +43,7 @@ jobs:
           command: bootimage build --release
       - store_artifacts:
           path: /root/project/target/x86_64-blog-os/release/bootimage-blog-os.bin
-          destination: artifact-file
+          destination: bootimage-blog-os.bin
 
 workflows:
   version: 2
