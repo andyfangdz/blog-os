@@ -32,18 +32,12 @@ jobs:
 
   build:
     docker:
-      - image: rustlang/rust:nightly
+      - image: andyfangdz/blog-os-buildenv
     steps:
       - checkout
       - run:
-          name: install rust-src
-          command: rustup component add rust-src
-      - run:
-          name: install xbuild
-          command: cargo install cargo-xbuild
-      - run:
           name: build kernel
-          command: cargo xbuild --target x86_64-blogs.json
+          command: cargo xbuild --target x86_64-blog-os.json
 
 workflows:
   version: 2
