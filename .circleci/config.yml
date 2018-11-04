@@ -39,6 +39,15 @@ jobs:
     steps:
       - checkout
       - run:
+          name: rustup component add rustfmt-preview
+          command: rustup component add rustfmt-preview
+      - run:
+          name: cargo fmt
+          command: cargo fmt --all -- --check
+      - run:
+          name: cargo build
+          command: cargo build
+      - run:
           name: cargo test
           command: cargo test
 
