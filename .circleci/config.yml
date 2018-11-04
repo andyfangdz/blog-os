@@ -4,6 +4,10 @@ defaults: &defaults
   docker:
     - image: buildpack-deps:stretch
 
+build-defaults: &build-defaults
+  docker:
+      - image: andyfangdz/blog-os-buildenv
+
 jobs:
   build-env:
     <<: *defaults
@@ -30,9 +34,16 @@ jobs:
           docker login -u $DOCKER_USER -p $DOCKER_PASS
           docker push $IMAGE
 
+  test:
+    <<: *build-defaults
+    steps:
+      - checkout
+      - run:
+          name: cargo test
+          command: cargo test
+
   build:
-    docker:
-      - image: andyfangdz/blog-os-buildenv
+    <<: *build-defaults
     steps:
       - checkout
       - run:
@@ -50,6 +61,7 @@ workflows:
   build-env-and-os:
     jobs:
       - build-env
+      - test
       - build
   nightly-buildenv:
     triggers:
