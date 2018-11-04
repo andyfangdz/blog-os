@@ -1,13 +1,17 @@
 [package]
-name = "blog-os"
+name = "blog_os"
 version = "0.1.0"
 authors = ["Andy Fang <andy.fang@airbnb.com>"]
+
+[features]
+integration-test = []
 
 [dependencies]
 bootloader_precompiled = "0.2.0"
 volatile = "0.2.3"
 spin = "0.4.9"
 uart_16550 = "0.1.0"
+x86_64 = "0.2.8"
 
 [dependencies.lazy_static]
 version = "1.0"
